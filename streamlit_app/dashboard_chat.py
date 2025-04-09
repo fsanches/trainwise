@@ -69,6 +69,15 @@ st.markdown(f"### 👋 Welcome, {first_name}!")
 if profile_url:
     st.image(profile_url, width=100)
 
+# --- Load plan ---
+@st.cache_data
+def load_intervals_plan():
+    try:
+        response = requests.get("http://localhost:8000/intervals/plan")
+        return response.json()
+    except Exception as e:
+        return {"error": str(e)}
+
 # --- Load activities ---
 @st.cache_data
 def load_activities():
