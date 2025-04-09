@@ -73,13 +73,9 @@ def handle_strava_callback(request: Request):
 
     tokens = response.json()
     save_tokens(tokens)
-    
-    return {
-        "message": "✅ Token received!",
-        "access_token": tokens["access_token"],
-        "refresh_token": tokens["refresh_token"],
-        "expires_at": tokens["expires_at"]
-    }
+
+    # ✅ Redirect back to Streamlit after saving token
+    return RedirectResponse("http://localhost:8501")
 
 
 @router.get("/login")
