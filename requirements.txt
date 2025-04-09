@@ -8,5 +8,7 @@ uvicorn[standard]
 pandas
 numpy
 
+#web
+streamlit
 
 
