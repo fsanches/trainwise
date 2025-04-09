@@ -2,6 +2,7 @@ import os
 import json
 
 TOKEN_PATH = "tokens/strava_token.json"
+JSON_PATH = "tokens/raw_data.json"
 
 def save_tokens(new_data: dict):
     # Preserve existing athlete data if available
@@ -36,3 +37,13 @@ def load_tokens():
         return None
     with open(TOKEN_PATH, "r") as f:
         return json.load(f)
+    
+def save_json(new_data: dict):
+    # Preserve existing athlete data if available
+    athlete_data = {}
+
+    os.makedirs(os.path.dirname(JSON_PATH), exist_ok=True)
+    with open(JSON_PATH, "w") as f:
+        json.dump(new_data, f, indent=4)
+    
+    print("✅ Raw data saved to", JSON_PATH)

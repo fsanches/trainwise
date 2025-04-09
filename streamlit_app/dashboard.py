@@ -5,6 +5,42 @@ import os
 import json
 import time
 
+# --- Token validation logic  ---
+if "rerun_triggered" not in st.session_state:
+    st.session_state.rerun_triggered = False
+
+token_path = "tokens/strava_token.json"
+token_valid = False
+token_data = {}
+
+if os.path.exists(token_path):
+    with open(token_path) as f:
+        token_data = json.load(f)
+        expires_at = token_data.get("expires_at", 0)
+        token_valid = time.time() < expires_at
+
+if not token_valid:
+    st.warning("⚠️ You are not connected to Strava or your token has expired.")
+    st.markdown("""
+    <a href='http://localhost:8000/strava/login' target='_self'>
+        <button style='font-size:16px; padding:10px 20px; background-color:#f63366; color:white; border:none; border-radius:6px;'>
+            🔐 Connect with Strava
+        </button>
+    </a>
+    """, unsafe_allow_html=True)
+
+    if os.path.exists(token_path):
+        with open(token_path) as f:
+            token_data = json.load(f)
+            expires_at = token_data.get("expires_at", 0)
+            if time.time() < expires_at and not st.session_state.rerun_triggered:
+                st.session_state.rerun_triggered = True
+                st.success("🔄 Login successful! Reloading dashboard...")
+                time.sleep(1)
+                st.rerun()
+
+    st.stop()
+
 st.set_page_config(page_title="TrainWise", layout="wide")
 st.title("🏊🚴🏃 TrainWise - Your AI Coach")
 

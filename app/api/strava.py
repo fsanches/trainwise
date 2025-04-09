@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from app.services.auth import authenticate
 from app.services.fetch import fetch_activities
 from app.services.process import process_activities
-from app.services.token_store import save_tokens, load_tokens
+from app.services.token_store import save_tokens, load_tokens, save_json
 from fastapi.responses import RedirectResponse
 
 
@@ -44,6 +44,7 @@ def sync_activities():
     try:
         response = requests.get(url, headers=headers, params=params)
         response.raise_for_status()
+        save_json(response.json())
         return response.json()  # 👉 retorna o JSON bruto
 
     except requests.exceptions.RequestException as e:

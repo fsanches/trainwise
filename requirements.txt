@@ -10,5 +10,6 @@ numpy
 
 #web
 streamlit
-
+#AI
+openai
 
